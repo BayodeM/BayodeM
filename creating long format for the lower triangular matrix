@@ -3,7 +3,10 @@ a
 a[1,1] <- 1
 a[1,2] <- 1
 a
-for(j in 1:7749) {
+# creating a triagular matrix of 124 rows
+u <- (124*125)/2
+u<- u-1
+for(j in 1:u) {
 if(a[j,1]==a[j,2]) {
 a[j+1,1] <- a[j,1]+1
 a[j+1,2] <- a[j+1,1]-a[j,2] } else {
