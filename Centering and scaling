@@ -1,0 +1,207 @@
+# Centering column to have a null mean
+b <- data.frame(matrix("", ncol=0, nrow=0))
+n <- ncol(dat)
+p=1
+while(p <= n) {
+for(i in 1:nrow(dat)) {
+a <- mean(dat[,p])
+b[i,p] <- dat[i,p]-a
+}
+p=p+1
+}
+c <- data.frame(matrix("", ncol=0, nrow=0))
+# Making the column have a unity variance
+n <- ncol(dat)
+p=1
+while(p <= n){
+for(i in 1:nrow(b)) {
+s <- sd(b[,p])
+c[i,p] <- b[i,p]/s
+}
+p=p+1
+}
+head(c)
+summary(c)
+
+c <- as.matrix(c)
+
+ma <- c%*%t(c)
+
+# Making the diagonal of a matrix have a mean of unity
+r <- nrow(dat)
+c <- ncol(dat)
+g <- diag(1/sqrt(diag(ma)), nrow=r, ncol=c)
+yy[c(1:10), c(1:10)]
+yy <- g%*%ma%*%g
+yy[c(1:10), c(1:10)]
+det(yy)
+
+
+require(MASS)
+dat <- read.table("pheno.txt", header=T)
+head(dat)
+station <- read.table("station.txt", header=T)
+head(station)
+head(dat)
+head(dat,30)
+z <- unique(dat$V26)
+z
+length(z)
+z <- unique(dat$farm)
+length(z)
+z <- unique(dat$ch)
+length(z)
+z <- unique(dat$V26)
+z
+length(z)
+y <- c(z, length(z))
+y
+list(z)
+unlist(z)
+cbind(z)
+cbind(z, 1:nrow(z))
+cbind(z, 1:length(z))
+cbind(z, 1:length(z), noquote)
+dim(cbind(z, 1:length(z)))
+dim(cbind(z, 1:length(z)), noquote)
+dim(cbind(z, 1:length(z), noquote))
+z
+y <- cbind(z, 1:length(z))
+y
+class(y)
+y <- as.data.frame(y)
+class(y)
+head(y)
+head(station)
+for(i in 1:nrow(station)) {
+if(nchar(station[i,26]) == 1) {
+station[i,27] <- paste0("0", station[i,26]) } else {
+station[i,27] <- station[i,26] } 
+print(i)
+}
+head(station)
+head(dat)
+head(substr(dat$carcass, 3,8))
+dat$V27 <- substr(dat$carcass, 3,8)
+head(dat)
+table(dat$V27)
+head(dat,30)
+dat$V28 <- paste(dat$V26, dat$V27, sep="_")
+head(dat,30)
+table(dat$V28)
+length(unique(dat$V28))
+head(dat)
+head(station)
+z <- unique(station$ch)
+z
+length(z)
+head(station)
+length(z)
+station$V28 <- as.integer(paste0(station$V25,station$V27))
+head(station)
+z
+y <- unique(station$V28)
+y
+z[1]
+y[1]
+subset(station, ch==z[1], & V28<=y[1])
+subset(station, ch==z[1] & V28<=y[1])
+y
+y[59]
+y <- y[59]
+y
+z
+dim(z)
+length(z)
+p=1
+envcov <- data.frame(matrix("", ncol=0, nrow=0))
+envcov
+for(i in 1:length(z)) {
+k=z[i]
+for(j in 1:length(y)) {
+l=y[j]
+a <- subset(station, ch==k & V28<=l)
+envcov[p,1] <- k
+envcov[p,2] <- l
+envcov[p,3] <- mean(a[,3], na.rm=T)
+envcov[p,4] <- mean(a[,4], na.rm=T)
+envcov[p,5] <- mean(a[,5], na.rm=T)
+envcov[p,6] <- mean(a[,6], na.rm=T)
+envcov[p,7] <- mean(a[,7], na.rm=T)
+envcov[p,8] <- mean(a[,8], na.rm=T)
+envcov[p,9] <- mean(a[,9], na.rm=T)
+envcov[p,10] <- mean(a[,10], na.rm=T)
+envcov[p,11] <- mean(a[,11], na.rm=T)
+envcov[p,12] <- mean(a[,12], na.rm=T)
+envcov[p,13] <- mean(a[,13], na.rm=T)
+envcov[p,14] <- mean(a[,14], na.rm=T)
+envcov[p,15] <- mean(a[,15], na.rm=T)
+envcov[p,16] <- mean(a[,16], na.rm=T)
+envcov[p,17] <- mean(a[,17], na.rm=T)
+envcov[p,18] <- mean(a[,18], na.rm=T)
+envcov[p,19] <- mean(a[,19], na.rm=T)
+envcov[p,20] <- mean(a[,20], na.rm=T)
+p <- p+1
+}
+print(i)
+}
+head(envcov)
+dim(envcov)
+head(dat)
+dat <- dat[order(dat$ID),]
+head(dat)
+head(envcov)
+dat$see <- envcov$V2[match(dat$V26, envcov$V1)]
+summary(dat)
+head(dat)
+envcov$see <- dat$V28[match(envcov$V1, dat$V26)]
+summary(envcov)
+envcov$see <- dat$BFT[match(envcov$V1, dat$V26)]
+summary(envcov)
+env <- envcov[!is.na(envcov$see),]
+dat$see <- env$V2[match(dat$V26, env$V1)]
+summary(dat)
+head(env)
+head(dat)
+env$ord <- 1:nrow(env)
+head(env)
+dat$ord <- env$ord[match(dat$V26, env$V1)]
+head(dat)
+summary(dat)
+head(env)
+head(dat)
+dat$IDD <- 1:nrow(dat)
+head(dat)
+dim(dat)
+head(dat[,c(31,1,4,5,12:15,19,20,25,30)])
+write.table(dat[,c(31,1,4,5,12:15,19,20,25,30)], "farm_cor_grm/use/dat.dat", quote=F, row.names=F, sep=" ")
+head(env)
+b <- scale(env[,c(3:20)])
+head(b)
+summary(b)
+sd(b[,1])
+class(b)
+dim(b)
+xx <- b%*%t(b)
+dim(xx)
+g <- matrix(diag(1/sqrt(xx), ncol=78, nrow=78))
+g <- matrix(diag(1/diag(sqrt(xx), ncol=78, nrow=78))
+)
+g <- matrix(diag(1/diag(sqrt(xx)), ncol=78, nrow=78))
+g <- matrix(diag(1/diag(sqrt(xx)), ncol=78, nrow=78))
+diag(1, ncol=2, nrow=2)
+diag(1/2, ncol=2, nrow=2)
+g <- diag(1/sqrt(xx), ncol=78, nrow=78))
+g <- diag(1/sqrt(xx), ncol=78, nrow=78)
+g <- diag(1/sqrt(diag(xx)), ncol=78, nrow=78)
+g[c(1:15), c(1:15)]
+xx[c(1:15), c(1:15)]
+dim(xx)
+dim(g)
+yy <- g%*%xx%*%g
+yy[c(1:15), c(1:15)]
+det(yy)
+log(det(yy))
+det(xx)
+head(a)
+h <- ginv(yy)
