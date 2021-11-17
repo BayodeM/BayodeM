@@ -1,3 +1,15 @@
+#######################################################
+#######################################################
+
+
+> mat1 = matrix(rep(1:n, n), nrow = n)
+> mat2 = t(mat1)
+> id1 = mat1[upper.tri(mat1, diag = TRUE)]
+> id2 = mat2[upper.tri(mat2, diag = TRUE)]
+> tab = data.frame(id1 = id1, id2 = id2, val = yy[upper.tri(yy, diag=TRUE)])
+
+
+###########################################################
 a <- data.frame(matrix("", ncol=0, nrow=0))
 a
 a[1,1] <- 1
