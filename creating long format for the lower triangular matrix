@@ -2,11 +2,12 @@
 #######################################################
 
 
-> mat1 = matrix(rep(1:n, n), nrow = n)
-> mat2 = t(mat1)
-> id1 = mat1[upper.tri(mat1, diag = TRUE)]
-> id2 = mat2[upper.tri(mat2, diag = TRUE)]
-> tab = data.frame(id1 = id1, id2 = id2, val = yy[upper.tri(yy, diag=TRUE)])
+dat1 = matrix(rep(1:n, n), nrow = n)
+dat2 = t(dat1)
+id1 = dat1[upper.tri(dat1, diag = TRUE)]
+id2 = dat2[upper.tri(dat2, diag = TRUE)]
+tab = data.frame(id1 = id1, id2 = id2, val = yy[upper.tri(yy, diag=TRUE)])
+tab = tab[tab$val != 0, ]
 
 
 ###########################################################
