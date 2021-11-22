@@ -31,7 +31,6 @@ ma <- c%*%t(c)
 r <- nrow(dat)
 c <- ncol(dat)
 g <- diag(1/sqrt(diag(ma)), nrow=r, ncol=c)
-yy[c(1:10), c(1:10)]
 yy <- g%*%ma%*%g
 yy[c(1:10), c(1:10)]
 det(yy)
