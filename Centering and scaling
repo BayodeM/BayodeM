@@ -28,8 +28,8 @@ c <- as.matrix(c)
 ma <- c%*%t(c)
 
 # Making the diagonal of a matrix have a mean of unity
-r <- nrow(dat)
-c <- ncol(dat)
+r <- nrow(ma)
+c <- ncol(ma)
 g <- diag(1/sqrt(diag(ma)), nrow=r, ncol=c)
 yy <- g%*%ma%*%g
 yy[c(1:10), c(1:10)]
