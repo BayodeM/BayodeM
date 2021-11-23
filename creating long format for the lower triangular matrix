@@ -11,6 +11,17 @@ tab = tab[tab$val != 0, ]
 
 
 ###########################################################
+
+colnames(tab) = c("V1", "V2", "V3")
+set = unique(sort(tab$V1))
+mat = matrix(0, nrow = length(set), ncol = length(set))
+rownames(mat) = colnames(mat) = paste0("x", set)
+for (i in set) mat[paste0("x", i), paste0("x", tab[tab$V1 == i, ]$V2)] = tab[tab$V1 == i, ]$V3
+rownames(mat) = colnames(mat) = set
+mat = mat + t(mat)
+diag(mat) = diag(mat)/2
+
+############################################################
 a <- data.frame(matrix("", ncol=0, nrow=0))
 a
 a[1,1] <- 1
