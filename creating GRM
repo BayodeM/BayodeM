@@ -1,0 +1,29 @@
+geno <- read.table("../geno.dat", header = F, row.names = 1, sep=" ")
+M <- as.matrix(geno)
+M[1:10, 1:10]
+nc <- ncol(M)
+nr <- nrow(M)
+P <- data.frame(matrix("", ncol = nc, nrow=nr))
+p=1
+while(p <=nc) {
+   a <- sum(M[,p])/(2*nr)
+   P[,p] <- a
+   p=p+1
+   print(p)
+}
+P <- as.matrix(P)
+PP <- 2*P
+P[1:10, 1:10]
+Z <- M-PP
+Zp <- t(Z)
+b <- data.frame(matrix("", nrow=0, ncol=0))
+for(j in 1:ncol(P)) {
+ b[j,1] <- P[1,j]*(1-P[1,j])
+ print(j)
+}
+dim(b)
+b <- as.matrix(b)
+c <- colSums(b)
+D <- 2*c
+D
+Gmatrix <- (Z%*%Zp)/D
