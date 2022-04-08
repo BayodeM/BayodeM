@@ -1,0 +1,22 @@
+##################################################################################################################################
+# Read in you map file !!! This code needs to be modified before use to reflect the changes in the names used !! Thank you!!!
+##################################################################################################################################
+map <- read.table("map.txt")
+colnames(map) <- c("V1","V2","V3","V4","V5","V6","V7")
+df <- data.frame(matrix("", ncol=8, nrow=0))
+colnames(df) <- c("V1","V2","V3","V4","V5","V6","V7","V8")
+q <- unique(map$V2)
+for(i in 1:length(q)) {
+  k <- q[i]
+  a <- subset(map, V2 == k)
+  a <- a[order(a$V3),]
+  for(j in 1:nrow(a)) {
+    if(a[j,"V3"] == min(a$V3)) {
+      a[j,8] <- 0
+    } else {
+      a[j,8] <- a[j,"V3"] - a[j-1,"V3"]
+    }
+  }
+  df <- rbind(df,a)
+  print(i)
+}
