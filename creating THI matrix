@@ -1,0 +1,40 @@
+##########################################
+# create an empty data frame
+##########################################
+
+newDF <- data.frame(matrix("", ncol=0, nrow=0))
+
+##################################################################################################################################
+# THI file should have two columns: herd order and THI values associated with herd with thi values ordered in decreasing order
+##################################################################################################################################
+
+thiDF <- THI
+
+##########################################
+# for loop for creating matrix
+##########################################
+
+for(i in 1:nrow(thiDF)) {
+for(p in 1:nrow(thiDF)) {
+cat("START CREATING MATRIX : ", i, sep=" ")
+if(i==p) {
+newDF[i,p] <- thiDF[p,2] - thiDF[p,2] }
+else if(i<p) {
+newDF[i,p] <- thiDF[i,2] - thiDF[p,2] } else {
+newDF[i,p] <- thiDF[p,2] - thiDF[i,2]
+}
+cat("DONE ...\n")
+}
+}
+
+##########################################
+# scale the matrix
+##########################################
+
+D <- newDF/max(newDF)
+
+##########################################
+# create final THI matrix
+##########################################
+
+E <- 1-D
