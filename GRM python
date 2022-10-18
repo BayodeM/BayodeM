@@ -1,0 +1,54 @@
+from __future__ import print_function
+from numpy import genfromtxt
+import numpy as np
+
+print ()
+print ("Hello! Please make sure to provide two files:")
+print ()
+print ("1. SNP file: SNP data in format 0, 1, 2 and NA for missings.")
+print ("2. IDs file: A file with one column for animal IDs corresponding to the SNP file.")
+print ()
+print ("Type the name of the IDs file:  ")
+AnIDs  = raw_input()
+print ()
+ID = genfromtxt(AnIDs, delimiter=' ')
+ID = np.asmatrix(ID)
+ID = ID.astype(int)
+print()
+print ("Type the name of the SNP file:  ")
+snp  = raw_input()
+print ("Reading input files GMatrix.txt")
+m = genfromtxt(snp, delimiter=' ')
+m = np.asmatrix(m)
+print ()
+print ("Building G-Matrix ...")
+print ()
+n0 = np.count_nonzero(m == 0, axis=0)
+n1 = np.count_nonzero(m == 1, axis=0)
+n2 = np.count_nonzero(m == 2, axis=0)
+
+freq = np.true_divide(((2*n2)+n1), (2*(n0+n1+n2)))
+
+freq2 = 2*(freq)
+Z = m-freq2
+Z = np.nan_to_num(Z) # Convert NA to 0
+Zp = Z.transpose()
+dd = np.multiply(freq, (1-freq))
+D = 2*np.sum(dd)
+G = (Z * Zp)/D
+
+print ()
+print ("Printing G-Matrix (lower triangular) to file (GMatrix.txt). The format is: ID1, ID2, Relationship coefficient ...")
+print ()
+f1 = open('GMatrix.txt', 'w')
+s=0
+for x in range(len(G)):
+    for y in range(0+s,len(G)):
+        print(ID[0,x],ID[0,y],G[x,y],file =f1)
+    s=s+1
+f1.close()
+print ()
+print ("G-Matrix was successfully built and saved to file GMatrix.txt")
+print ()
+print ("Done!")
+print ()
