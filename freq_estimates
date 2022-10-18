@@ -1,0 +1,60 @@
+############################
+## calculate freq/missing ##
+############################
+
+gen <- read.table("ordGeno", row.names=1, header=F, sep=" ")
+map <- read.table("ordMap", header=T)
+tmp <- data.frame(matrix(ncol=7, nrow=0))
+colnames(tmp) <- c("snpID", "AA", "AB", "BB", "missing", "freq", "Total", "PercentMissing")
+for(i in 1:ncol(gen)) {
+    a <- gen[,i]
+    tmp[i,1] <- map[i,2]
+    tmp[i,2] <- sum(a==0)
+    tmp[i,3] <- sum(a==1)
+    tmp[i,4] <- sum(a==2)
+    tmp[i,5] <- sum(a==5)
+    tmp[i,6] <- ((2*tmp[i,4])+tmp[i,3])/(2*(tmp[i,2]+tmp[i,3]+tmp[i,4]))
+    tmp[i,7] <- tmp[i,2]+tmp[i,3]+tmp[i,4]+tmp[i,5]
+    tmp[i,8] <- tmp[i,5]/tmp[i,7]
+    if(i %% 5000 == 0) {
+        cat(paste0(round(i/ncol(geno) * 100), "%.", sep=""))
+    }
+}
+
+
+#################################################################################
+### removing maf <0.05 , monomorphic SNP and missing SNP greater than 5% ########
+#################################################################################
+tmp1 <- subset(tmp, freq >=0.05 & freq <1)
+tmp3 <- subset(tmp1, PercentMissing <=0.05)
+tmp3$ord <- rownames(map)[match(tmp3$snpID, map$snpID)]
+
+geno <- data.frame(matrix(ncol=0, nrow=nrow(gen)))
+n=1
+while(n<=nrow(tmp3)) {
+    a <- tmp3[n,'ord']
+    geno[,n] <- gen[,a]
+    if(n %% 5000 == 0) {
+        cat(paste0(round(n/nrow(tmp3) * 100), "%.", sep=""))
+    }
+    n=n+1    
+}
+rownames(geno) <- rownames(gen)
+
+
+##########################################
+## missing individuals  #################
+#########################################
+tmp4 <- data.frame(matrix(ncol=4, nrow=0))
+colnames(tmp4) <- c("ID", "missing", "Total", "PercentMissing")
+for(i in 1:nrow(geno)) {
+    a <- geno[i,]
+    tmp4[i,1] <- rownames(geno)[i]
+    tmp4[i,2] <- sum(a==5)
+    tmp4[i,3] <- ncol(geno) 
+    tmp4[i,4] <- tmp4[i,2]/tmp4[i,3]
+    if(i %% 100 == 0) {
+        cat(paste0(round(i/nrow(geno) * 100), "%.", sep=""))
+    }
+}
+tmp2 <- subset(tmp4, PercentMissing <=0.05)
