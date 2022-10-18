@@ -1,0 +1,60 @@
+###########################################################################
+##### for this genotype file the missing value must be coded as 5 or 9 ####
+###########################################################################
+geno <- read.table("geno.dat", header = F, row.names = 1, sep=" ")
+M <- as.matrix(geno)
+M[1:10, 1:10]
+nc <- ncol(M)
+nr <- nrow(M)
+P <- data.frame(matrix(ncol = nc, nrow=nr))
+p=1
+while(p <=nc) {
+   a <- M[,p]
+   n0 <- sum(a==0)
+   n1 <- sum(a==1)
+   n2 <- sum(a==2)
+   freq <- ((2*n2)+n1)/(2*(n0+n1+n2))
+   P[,p] <- freq
+   if(p %% 5000 == 0) {
+        cat(paste0(round(p/ncol(geno) * 100), "% DONE\n", sep=""))
+    }
+    p=p+1
+}
+P <- as.matrix(P)
+PP <- 2*P
+P[1:10, 1:10]
+Z <- M-PP
+for(i in 1:ncol(Z)) {
+   a <- which(Z[,i]>3)
+   b <- length(a)
+   if(b>=1) {
+      for(c in 1:b) {
+      k=a[c]
+      Z[k,i] <- 0
+   }
+   }
+}
+Zp <- t(Z)
+b <- data.frame(matrix("", nrow=0, ncol=0))
+for(j in 1:ncol(P)) {
+ b[j,1] <- P[1,j]*(1-P[1,j])
+ if(j %% 5000 == 0) {
+        cat(paste0(round(j/ncol(geno) * 100), "% DONE\n", sep=""))
+    }
+}
+dim(b)
+b <- as.matrix(b)
+c <- colSums(b)
+D <- 2*c
+D
+Gmatrix <- (Z%*%Zp)/D
+det(Gmatrix)
+library(MASS)
+giv <- ginv(Gmatrix)
+n=dim(giv)[1]
+dat1 = matrix(rep(rownames(geno),n), nrow = n)
+dat2 = t(dat1)
+id1 = dat1[upper.tri(dat1, diag = TRUE)]
+id2 = dat2[upper.tri(dat2, diag = TRUE)]
+grm = data.frame(id1 = id1, id2 = id2, val = giv[upper.tri(giv, diag=TRUE)])
+head(grm)
