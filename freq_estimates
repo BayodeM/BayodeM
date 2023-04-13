@@ -4,8 +4,8 @@
 
 gen <- read.table("ordGeno", row.names=1, header=F, sep=" ")
 map <- read.table("ordMap", header=T)
-tmp <- data.frame(matrix(ncol=7, nrow=0))
-colnames(tmp) <- c("snpID", "AA", "AB", "BB", "missing", "freq", "Total", "PercentMissing")
+tmp <- data.frame(matrix(ncol=9, nrow=0))
+colnames(tmp) <- c("snpID", "AA", "AB", "BB", "missing", "freq", "Total", "TotalNoMissing", "PercentMissing")
 for(i in 1:ncol(gen)) {
     a <- gen[,i]
     tmp[i,1] <- map[i,2]
@@ -15,7 +15,8 @@ for(i in 1:ncol(gen)) {
     tmp[i,5] <- sum(a==5)
     tmp[i,6] <- ((2*tmp[i,4])+tmp[i,3])/(2*(tmp[i,2]+tmp[i,3]+tmp[i,4]))
     tmp[i,7] <- tmp[i,2]+tmp[i,3]+tmp[i,4]+tmp[i,5]
-    tmp[i,8] <- tmp[i,5]/tmp[i,7]
+    tmp[i,8] <- tmp[i,2]+tmp[i,3]+tmp[i,4]
+    tmp[i,9] <- tmp[i,5]/tmp[i,7]
     if(i %% 5000 == 0) {
         cat(paste0(round(i/ncol(geno) * 100), "%.", sep=""))
     }
